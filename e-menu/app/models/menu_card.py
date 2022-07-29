@@ -1,8 +1,7 @@
-from sqlalchemy import Column, String, Text, Table, ForeignKey
+from sqlalchemy import Column, ForeignKey, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from app.database.base_class import Base
-
 
 menu_dish_junction = Table(
     "menu_dish_junction",
