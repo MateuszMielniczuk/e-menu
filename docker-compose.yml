@@ -1,0 +1,53 @@
+version: "3.9"  # optional since v1.27.0
+
+services:
+
+  # =============POSTGRES=SERVICE======================
+  postgres:
+    container_name: DB
+    env_file:
+      - .env
+    image: postgres:14-alpine
+    networks:
+      - emenu-network
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${DATABASE_NAME}", "-U", "${DATABASE_USERNAME}"]
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
+
+  api:
+    # =============API=SERVICE======================
+    container_name: API
+    build:
+      context: ./e-menu
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - emenu-network
+    ports:
+      - "8000:8000"
+    user: python
+    volumes:
+      - ./e-menu:/opt/python
+
+networks:
+  emenu-network:
+    driver: bridge
+    name: emenu-network
+
+volumes:
+  postgis-data: null
