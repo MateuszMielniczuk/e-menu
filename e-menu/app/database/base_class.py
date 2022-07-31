@@ -16,4 +16,4 @@ class Base:
 
     id = Column(Integer, primary_key=True, index=True)
     date_created = Column(DateTime(timezone=True), default=datetime.utcnow)
-    date_updated = Column(DateTime(timezone=True))
+    date_updated = Column(DateTime(timezone=True), onupdate=datetime.utcnow)
