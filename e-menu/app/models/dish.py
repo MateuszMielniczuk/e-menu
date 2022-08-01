@@ -11,5 +11,5 @@ class Dish(Base):
     is_vegan: bool = Column(Boolean, nullable=False)
 
     def __repr__(self) -> str:
-        vegan = ", VEGAN!" if self.is_vegan else "."
-        return f"{self.name}: price: {self.price}{vegan}"
+        vegan = "dish is vegan!" if self.is_vegan else "not vegan!"
+        return f"Name: {self.name}, price: {self.price}, {vegan}"

@@ -14,7 +14,7 @@ def get_dish_by_id(db: Session, id: int):
     if not dish.first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Menu object with ID: {id} not found in database",
+            detail=f"Dish with ID: {id} not found in database",
         )
     return dish
 

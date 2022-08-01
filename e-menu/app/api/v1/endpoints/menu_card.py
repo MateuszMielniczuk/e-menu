@@ -1,7 +1,14 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from app.crud.menu_card import create_menu, delete_menu, get_menu, update_menu
+from app.crud.menu_card import (
+    append_dish,
+    create_menu,
+    delete_menu,
+    get_menu,
+    remove_dish,
+    update_menu,
+)
 from app.database.session import get_db
 from app.schemas.menu_card import MenuCard, MenuCreate, MenuUpdate
 
@@ -18,7 +25,7 @@ def show_menu_card(db: Session = Depends(get_db)):
 @router.post("/", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
 def create_menu_card(request: MenuCreate, db: Session = Depends(get_db)):
     """Create new menu card"""
-    menu = create_menu(request, db)
+    menu = create_menu(db=db, request=request)
     return menu
 
 
@@ -32,3 +39,17 @@ def update_menu_card(*, db: Session = Depends(get_db), id: int, request: MenuUpd
 def delete_menu_card(*, db: Session = Depends(get_db), id: int):
     """Delete existing menu card"""
     delete_menu(db=db, id=id)
+
+
+@router.post("/{id_menu}/dish={id_dish}", status_code=status.HTTP_201_CREATED)
+def add_dish_to_menu(id_menu: int, id_dish: int, db: Session = Depends(get_db)):
+    """Add dish to menu card"""
+    append_dish(db=db, id_menu=id_menu, id_dish=id_dish)
+    return "Dish successfully added to menu"
+
+
+@router.delete("/{id_menu}/dish={id_dish}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_dish_from_menu(id_menu: int, id_dish: int, db: Session = Depends(get_db)):
+    """Delete dish from menu card"""
+    remove_dish(db=db, id_menu=id_menu, id_dish=id_dish)
+    return "Dish successfully removed from menu"

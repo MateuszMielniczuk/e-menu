@@ -12,8 +12,6 @@ class DishBase(BaseModel):
     is_vegan: Optional[bool] = Field(description="Dish is vegan if value is True")
 
     class Config:
-        orm_mode = True
-        title = "Dish"
         schema_extra = {
             "example": {
                 "name": "Dish name",

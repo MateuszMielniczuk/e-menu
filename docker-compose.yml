@@ -4,7 +4,7 @@ services:
 
   # =============POSTGRES=SERVICE======================
   postgres:
-    container_name: DB
+    container_name: PG
     env_file:
       - .env
     image: postgres:14-alpine
