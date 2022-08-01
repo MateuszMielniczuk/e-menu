@@ -62,3 +62,6 @@ migrate-upgrate:
 db-dump:
 	$(DC) exec postgres /bin/sh -c\
 	  "pg_dump $(DATABASE_NAME) -U $(DATABASE_USERNAME) -h $(DATABASE_CLIENT) > $(DUMP)"
+db-load:
+	$(DC) exec postgres /bin/sh -c\
+	  "psql -d $(DATABASE_NAME) -U $(DATABASE_USERNAME) < $(DUMP)"
