@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[Dish])
-def show_dish(db: Session = Depends(get_db)):
+def show_all_dishes(db: Session = Depends(get_db)):
     dish = get_dish(db)
     return dish
 

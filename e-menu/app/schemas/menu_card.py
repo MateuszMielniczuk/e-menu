@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from app.schemas.dish import Dish
+
 
 class MenuBase(BaseModel):
     name: str = Field(description="Menu card name")
@@ -21,6 +23,7 @@ class MenuCard(MenuBase):
     id: int = Field(description="Menu card database ID")
     date_created: datetime = Field(description="Menu card creation date")
     date_updated: Optional[datetime] = Field(description="Menu card last update date")
+    dishes: Optional[list[Dish]] = Field(description="Dishes list", default_factory=list)
 
     class Config:
         orm_mode = True

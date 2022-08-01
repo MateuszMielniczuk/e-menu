@@ -5,7 +5,8 @@ from app.crud.menu_card import (
     append_dish,
     create_menu,
     delete_menu,
-    get_menu,
+    get_menu_by_id,
+    get_menu_cards,
     remove_dish,
     update_menu,
 )
@@ -16,10 +17,16 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[MenuCard])
-def show_menu_card(db: Session = Depends(get_db)):
-    """Show non empty menu cards menu cards"""
-    menu = get_menu(db)
-    return menu
+def show_menu_cards(db: Session = Depends(get_db)):
+    """Show non empty menu cards"""
+    menu_cards = get_menu_cards(db)
+    return menu_cards
+
+
+@router.get("/{id}", response_model=MenuCard)
+def get_menu_detail(id: int, db: Session = Depends(get_db)):
+    menu = get_menu_by_id(db=db, id=id)
+    return menu.first()
 
 
 @router.post("/", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
@@ -36,7 +43,7 @@ def update_menu_card(*, db: Session = Depends(get_db), id: int, request: MenuUpd
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_menu_card(*, db: Session = Depends(get_db), id: int):
+def delete_menu_card(id: int, db: Session = Depends(get_db)):
     """Delete existing menu card"""
     delete_menu(db=db, id=id)
 

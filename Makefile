@@ -1,9 +1,8 @@
 include .env
 
 DC = $(COMPOSE)
-
 PY = $(DC) exec api
-
+DUMP = /docker-entrypoint-initdb.d/dump.sql
 
 #======================= CONTAINERS_MANAGEMENT =========================
 #=======================================================================
@@ -59,3 +58,7 @@ migrate-downgrade:
 	$(PY) alembic downgrade -1
 migrate-upgrate:
 	$(PY) alembic upgrade +1
+
+db-dump:
+	$(DC) exec postgres /bin/sh -c\
+	  "pg_dump $(DATABASE_NAME) -U $(DATABASE_USERNAME) -h $(DATABASE_CLIENT) > $(DUMP)"

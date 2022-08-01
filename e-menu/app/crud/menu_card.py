@@ -24,7 +24,7 @@ def get_menu_by_id(db: Session, id: int):
     return menu
 
 
-def get_menu(db: Session):
+def get_menu_cards(db: Session):
     return db.query(MenuCardModel).all()
 
 
