@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field
 
 
 class MenuBase(BaseModel):
-    name: str
-    description: Optional[str]
+    name: str = Field(description="Menu card name")
+    description: Optional[str] = Field(description="Menu card description")
 
     class Config:
         schema_extra = {
@@ -30,6 +30,8 @@ class MenuCard(MenuBase):
                 "id": 1,
                 "name": "Lunch menu",
                 "description": "From 11 to 13",
+                "date_created": "2022-07-31 22:42:45.636 +0000",
+                "date_updated": "2022-07-31 22:46:37.162 +0000",
             }
         }
 
