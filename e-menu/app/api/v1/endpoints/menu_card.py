@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends, status
+from datetime import date
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.crud.menu_card import (
@@ -16,10 +19,18 @@ from app.schemas.menu_card import MenuCard, MenuCreate, MenuUpdate
 router = APIRouter()
 
 
-@router.get("/", response_model=list[MenuCard])
-def show_menu_cards(db: Session = Depends(get_db)):
+@router.get("/", response_model=list[MenuCard], summary="Show by default non empty menu cards")
+def show_menu_cards(
+    db: Session = Depends(get_db),
+    not_empty: Optional[bool] = Query(description="If value is True not showing empty menu cards", default=True),
+    name: Optional[str] = None,
+    date_created: Optional[date] = None,
+    date_updated: Optional[date] = None,
+):
     """Show non empty menu cards"""
-    menu_cards = get_menu_cards(db)
+    menu_cards = get_menu_cards(
+        db=db, not_empty=not_empty, name=name, date_created=date_created, date_updated=date_updated
+    )
     return menu_cards
 
 
@@ -31,7 +42,10 @@ def get_menu_detail(id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
 def create_menu_card(request: MenuCreate, db: Session = Depends(get_db)):
-    """Create new menu card"""
+    """
+    Create new menu card
+    - **name**: each item must have unique name
+    """
     menu = create_menu(db=db, request=request)
     return menu
 

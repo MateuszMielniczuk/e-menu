@@ -1,4 +1,7 @@
+from datetime import date
+
 from fastapi import HTTPException, status
+from sqlalchemy import Date, cast, select
 from sqlalchemy.orm import Session
 
 from app.crud.dish import get_dish_by_id
@@ -24,8 +27,17 @@ def get_menu_by_id(db: Session, id: int):
     return menu
 
 
-def get_menu_cards(db: Session):
-    return db.query(MenuCardModel).all()
+def get_menu_cards(db: Session, not_empty: bool, name: str, date_created: date, date_updated: date):
+    menu = select(MenuCardModel)
+    if not_empty:
+        menu = menu.filter(MenuCardModel.dishes != None)  # noqa E711
+    if name:
+        menu = menu.filter(MenuCardModel.name.ilike(f"%{name}%"))
+    if date_created:
+        menu = menu.filter(cast(MenuCardModel.date_created, Date) == date.strftime(date_created, "%Y-%m-%d"))
+    if date_updated:
+        menu = menu.filter(cast(MenuCardModel.date_updated, Date) == date.strftime(date_updated, "%Y-%m-%d"))
+    return db.execute(menu).scalars().all()
 
 
 def create_menu(request: MenuCreate, db: Session):
