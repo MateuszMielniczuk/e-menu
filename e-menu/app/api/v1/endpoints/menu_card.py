@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("/", response_model=list[MenuCard], summary="Show by default non empty menu cards")
 def show_menu_cards(
     db: Session = Depends(get_db),
-    not_empty: Optional[bool] = Query(description="If value is True not showing empty menu cards", default=True),
+    not_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
     name: Optional[str] = None,
     date_created: Optional[date] = None,
     date_updated: Optional[date] = None,
