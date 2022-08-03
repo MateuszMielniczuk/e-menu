@@ -1,4 +1,3 @@
-from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.dish import Dish as DishModel
@@ -10,13 +9,7 @@ def get_dish(db: Session):
 
 
 def get_dish_by_id(db: Session, id: int):
-    dish = db.query(DishModel).filter(DishModel.id == id)
-    if not dish.first():
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Dish with ID: {id} not found in database",
-        )
-    return dish
+    return db.query(DishModel).filter(DishModel.id == id)
 
 
 def create_dish(request: DishCreate, db: Session):
@@ -33,16 +26,14 @@ def create_dish(request: DishCreate, db: Session):
     return dish_item
 
 
-def update_dish(db: Session, id: int, request: DishUpdate):
-    db_object = get_dish_by_id(db=db, id=id)
+def update_dish(db: Session, db_dish: DishModel, request: DishUpdate):
     request = dict(request)
-    db_object.update(request)
+    db_dish.update(request)
     db.commit()
     return "Resource successfully updated"
 
 
-def delete_dish(db: Session, id: int):
-    db_object = get_dish_by_id(db=db, id=id)
-    db_object.delete(synchronize_session=False)
+def delete_dish(db: Session, db_dish: DishModel):
+    db.delete(db_dish)
     db.commit()
     return "Resource successfully deleted"
