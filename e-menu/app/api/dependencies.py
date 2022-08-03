@@ -1,3 +1,5 @@
+from typing import Generator
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -6,8 +8,17 @@ from sqlalchemy.orm import Session
 from app import settings
 from app.core.utils import verify_password
 from app.crud.user import get_user_by_email
-from app.database.session import get_db
+from app.database.session import SessionLocal
 from app.schemas.user import TokenData
+
+
+def get_db() -> Generator:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/access-token")
 

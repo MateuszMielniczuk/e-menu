@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, get_db
 from app.crud.dish import create_dish, delete_dish, get_dish, update_dish
-from app.database.session import get_db
 from app.models.user import User as UserModel
 from app.schemas.dish import Dish, DishCreate, DishUpdate
 

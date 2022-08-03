@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, get_db
 from app.crud.menu_card import (
     append_dish,
     create_menu,
@@ -14,7 +14,6 @@ from app.crud.menu_card import (
     remove_dish,
     update_menu,
 )
-from app.database.session import get_db
 from app.models.user import User as UserModel
 from app.schemas.menu_card import MenuCard, MenuCreate, MenuUpdate
 
