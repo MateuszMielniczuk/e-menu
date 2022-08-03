@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.api.dependencies import get_current_user
 from app.crud.menu_card import (
     append_dish,
     create_menu,
@@ -14,6 +15,7 @@ from app.crud.menu_card import (
     update_menu,
 )
 from app.database.session import get_db
+from app.models.user import User as UserModel
 from app.schemas.menu_card import MenuCard, MenuCreate, MenuUpdate
 
 router = APIRouter()
@@ -41,7 +43,9 @@ def get_menu_detail(id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
-def create_menu_card(request: MenuCreate, db: Session = Depends(get_db)):
+def create_menu_card(
+    request: MenuCreate, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
+):
     """
     Create new menu card
     - **name**: each item must have unique name
@@ -51,26 +55,32 @@ def create_menu_card(request: MenuCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def update_menu_card(*, db: Session = Depends(get_db), id: int, request: MenuUpdate):
+def update_menu_card(
+    id: int, request: MenuUpdate, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
+):
     """Update existing menu card"""
     update_menu(db=db, id=id, request=request)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_menu_card(id: int, db: Session = Depends(get_db)):
+def delete_menu_card(id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     """Delete existing menu card"""
     delete_menu(db=db, id=id)
 
 
 @router.post("/{id_menu}/dish={id_dish}", status_code=status.HTTP_201_CREATED)
-def add_dish_to_menu(id_menu: int, id_dish: int, db: Session = Depends(get_db)):
+def add_dish_to_menu(
+    id_menu: int, id_dish: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
+):
     """Add dish to menu card"""
     append_dish(db=db, id_menu=id_menu, id_dish=id_dish)
     return "Dish successfully added to menu"
 
 
 @router.delete("/{id_menu}/dish={id_dish}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_dish_from_menu(id_menu: int, id_dish: int, db: Session = Depends(get_db)):
+def delete_dish_from_menu(
+    id_menu: int, id_dish: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
+):
     """Delete dish from menu card"""
     remove_dish(db=db, id_menu=id_menu, id_dish=id_dish)
     return "Dish successfully removed from menu"
