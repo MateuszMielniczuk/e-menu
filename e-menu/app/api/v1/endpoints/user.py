@@ -34,7 +34,7 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     user = get_user_by_email(db=db, email=user_in.email)
     if user:
         raise HTTPException(
-            status_code=status.HTTP_400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="The user with this email already exists in database.",
         )
     user = create(db=db, user_in=user_in)

@@ -26,13 +26,13 @@ def create_new_dish(
 
 @router.put("/{id}", response_model=Dish)
 def update_dish_item(
-    *, db: Session = Depends(get_db), id: int, request: DishUpdate, current_user: UserModel = Depends(get_current_user)
+    id: int, request: DishUpdate, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
 ):
     """Update existing dish"""
     update_dish(db=db, id=id, request=request)
 
 
 @router.delete("/{id}", response_model=Dish)
-def delete_dish_item(*, db: Session = Depends(get_db), id: int, current_user: UserModel = Depends(get_current_user)):
+def delete_dish_item(id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     """Delete existing dish database"""
     delete_dish(db=db, id=id)

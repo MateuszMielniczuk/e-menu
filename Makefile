@@ -44,8 +44,8 @@ isort-diff:
 	$(PY) isort . --diff --skip venv --skip versions
 isort-exec:
 	$(PY) isort . --skip venv --skip versions
-backend-dump:
-	$(RCV) backend /home/python/.local abd-backend
+test:
+	$(PY) pytest -v -p no:warnings --cov=. --cov-report html
 
 #====================== DATABASE MANAGEMENT ============================
 #=======================================================================
