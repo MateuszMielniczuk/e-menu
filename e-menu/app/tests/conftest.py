@@ -6,9 +6,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.api.default import router as default_router
 from app.api.dependencies import get_db
 from app.api.v1.routers import router as api_router
-from app.api.default import router as default_router
 from app.crud.user import UserCreate, create, get_user
 from app.database.base import Base
 

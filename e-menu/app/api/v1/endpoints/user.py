@@ -4,10 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import authenticate_user, get_current_user, get_db
+from app.api.dependencies import authenticate_user, get_db  # , get_current_user
 from app.core.utils import create_access_token
 from app.crud.user import create, get_user_by_email
-from app.models.user import User as UserModel
+
+# from app.models.user import User as UserModel
 from app.schemas.user import Token, User, UserCreate
 from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -41,9 +42,9 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     return user
 
 
-@router.post("/login/test-token", response_model=User)
-def test_token(current_user: UserModel = Depends(get_current_user)):
-    """
-    Test access token
-    """
-    return current_user
+# @router.post("/login/test-token", response_model=User)
+# def test_token(current_user: UserModel = Depends(get_current_user)):
+#     """
+#     Test access token
+#     """
+#     return current_user
