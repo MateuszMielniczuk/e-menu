@@ -20,7 +20,7 @@ from app.schemas.menu_card import MenuCard, MenuCreate, MenuUpdate
 router = APIRouter()
 
 
-@router.get("/", response_model=list[MenuCard], summary="Show by default non empty menu cards")
+@router.get("", response_model=list[MenuCard], summary="Show by default non empty menu cards")
 def show_menu_cards(
     db: Session = Depends(get_db),
     not_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
@@ -41,7 +41,7 @@ def get_menu_detail(id: int, db: Session = Depends(get_db)):
     return menu.first()
 
 
-@router.post("/", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
 def create_menu_card(
     request: MenuCreate, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)
 ):

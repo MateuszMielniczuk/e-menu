@@ -2,13 +2,11 @@ from sqlalchemy.orm import Session
 
 from app.core.utils import get_password_hash
 from app.models.user import User as UserModel
-from app.schemas.user import UserCreate, UserInDB
+from app.schemas.user import UserCreate
 
 
 def get_user(db: Session, email: str):
-    user = db.query(UserModel).filter(UserModel.email == email).first()
-    if user:
-        return UserInDB(**user.__dict__)
+    return db.query(UserModel).filter(UserModel.email == email).first()
 
 
 def get_user_by_email(db: Session, email: str):

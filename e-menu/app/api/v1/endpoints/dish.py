@@ -22,13 +22,13 @@ def not_found_exception(id: int):
     )
 
 
-@router.get("/", response_model=list[Dish])
+@router.get("", response_model=list[Dish])
 def show_all_dishes(db: Session = Depends(get_db)):
     dish = get_dish(db)
     return dish
 
 
-@router.post("/", response_model=Dish, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=Dish, status_code=status.HTTP_201_CREATED)
 def create_new_dish(
     request: DishCreate,
     db: Session = Depends(get_db),
