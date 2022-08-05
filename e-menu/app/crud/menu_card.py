@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import Date, cast, select
+from sqlalchemy import Date, cast, desc, select
 from sqlalchemy.orm import Session
 
 from app.models.dish import Dish as DishModel
@@ -16,9 +16,16 @@ def get_menu_by_id(db: Session, id: int):
     return db.query(MenuCardModel).filter(MenuCardModel.id == id)
 
 
-def get_menu_cards(db: Session, not_empty: bool, name: str, date_created: date, date_updated: date):
+def get_menu_cards(
+    db: Session,
+    is_empty: bool,
+    name: str,
+    date_created: date,
+    date_updated: date,
+    order_by: dict,
+):
     menu = select(MenuCardModel)
-    if not_empty:
+    if is_empty:
         menu = menu.filter(MenuCardModel.dishes != None)  # noqa E711
     if name:
         menu = menu.filter(MenuCardModel.name.ilike(f"%{name}%"))
@@ -26,6 +33,17 @@ def get_menu_cards(db: Session, not_empty: bool, name: str, date_created: date, 
         menu = menu.filter(cast(MenuCardModel.date_created, Date) == date.strftime(date_created, "%Y-%m-%d"))
     if date_updated:
         menu = menu.filter(cast(MenuCardModel.date_updated, Date) == date.strftime(date_updated, "%Y-%m-%d"))
+    if order_by:
+        if "name" in order_by.keys():
+            if order_by["name"] == "desc":
+                menu = menu.order_by(MenuCardModel.name.desc())
+            else:
+                menu = menu.order_by(MenuCardModel.name)
+        if "nr_of_dishes" in order_by.keys():
+            if order_by["nr_of_dishes"] == "desc":
+                menu = menu.order_by(desc(MenuCardModel.dish_count))
+            else:
+                menu = menu.order_by(MenuCardModel.dish_count)
     return db.execute(menu).scalars().all()
 
 

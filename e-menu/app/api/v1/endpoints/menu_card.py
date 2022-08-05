@@ -37,17 +37,50 @@ def unique_name_exception(name: str):
     )
 
 
+def validate_order_parameters(parameters: list):
+    options = ["name", "nr_of_dishes"]
+    operators = ["asc", "desc", ""]
+    order_dict = dict()
+    for param in parameters:
+        k, *v = param.split("[")
+        if k not in options or k in order_dict.keys():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Bad option name for order_by or two same operators specified. Valid are: name, nr_of_dishes.",
+            )
+        if not v:
+            order_dict[k] = ""
+        else:
+            if v[0][:-1] not in operators:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Bad operator name for order_by. Valid are: [asc], [desc] or None",
+                )
+            order_dict[k] = v[0][:-1]
+    return order_dict
+
+
 @router.get("", response_model=list[MenuCard], summary="Show by default non empty menu cards")
 def show_menu_cards(
     db: Session = Depends(get_db),
-    not_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
+    order_by: list[str] = Query(
+        default=None, description="Available options are: name, nr_of_dishes. Operators: [asc], [desc]."
+    ),
+    is_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
     name: Optional[str] = None,
     date_created: Optional[date] = None,
     date_updated: Optional[date] = None,
 ):
     """Show non empty menu cards"""
+    if order_by:
+        order_by = validate_order_parameters(order_by)
     menu_cards = get_menu_cards(
-        db=db, not_empty=not_empty, name=name, date_created=date_created, date_updated=date_updated
+        db=db,
+        is_empty=is_empty,
+        name=name,
+        date_created=date_created,
+        date_updated=date_updated,
+        order_by=order_by,
     )
     return menu_cards
 
