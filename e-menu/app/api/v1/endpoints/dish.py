@@ -54,7 +54,7 @@ def update_dish_item(
     return db_dish.first()
 
 
-@router.delete("/{id}", response_model=Dish)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_dish_item(
     id: int,
     db: Session = Depends(get_db),
@@ -65,4 +65,3 @@ def delete_dish_item(
     if not db_dish:
         raise not_found_exception(id)
     delete_dish(db=db, db_dish=db_dish)
-    return db_dish

@@ -45,7 +45,4 @@ def test_user_delete_not_found(client, user_token_header):
 
 def test_delete_dish(client, user_token_header):
     response = client.delete("/v1/dish/1", headers=user_token_header)
-    assert response.status_code == 200
-    content = response.json()
-    assert content["name"] == "Updated name"
-    assert content["description"] == "Updated description"
+    assert response.status_code == 204
