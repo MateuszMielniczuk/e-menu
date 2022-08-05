@@ -68,8 +68,10 @@ def show_menu_cards(
     ),
     is_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
     name: Optional[str] = None,
-    date_created: Optional[date] = None,
-    date_updated: Optional[date] = None,
+    date_created_gte: Optional[date] = Query(default=None, alias="date_created[gte]"),
+    date_created_lte: Optional[date] = Query(default=None, alias="date_created[lte]"),
+    date_updated_gte: Optional[date] = Query(default=None, alias="date_updated[gte]"),
+    date_updated_lte: Optional[date] = Query(default=None, alias="date_updated[lte]"),
 ):
     """Show non empty menu cards"""
     if order_by:
@@ -78,8 +80,10 @@ def show_menu_cards(
         db=db,
         is_empty=is_empty,
         name=name,
-        date_created=date_created,
-        date_updated=date_updated,
+        date_created_gte=date_created_gte,
+        date_created_lte=date_created_lte,
+        date_updated_gte=date_updated_gte,
+        date_updated_lte=date_updated_lte,
         order_by=order_by,
     )
     return menu_cards

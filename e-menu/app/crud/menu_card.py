@@ -20,8 +20,10 @@ def get_menu_cards(
     db: Session,
     is_empty: bool,
     name: str,
-    date_created: date,
-    date_updated: date,
+    date_created_gte: date,
+    date_created_lte: date,
+    date_updated_gte: date,
+    date_updated_lte: date,
     order_by: dict,
 ):
     menu = select(MenuCardModel)
@@ -29,10 +31,14 @@ def get_menu_cards(
         menu = menu.filter(MenuCardModel.dishes != None)  # noqa E711
     if name:
         menu = menu.filter(MenuCardModel.name.ilike(f"%{name}%"))
-    if date_created:
-        menu = menu.filter(cast(MenuCardModel.date_created, Date) == date.strftime(date_created, "%Y-%m-%d"))
-    if date_updated:
-        menu = menu.filter(cast(MenuCardModel.date_updated, Date) == date.strftime(date_updated, "%Y-%m-%d"))
+    if date_created_gte:
+        menu = menu.filter(cast(MenuCardModel.date_created, Date) >= date.strftime(date_created_gte, "%Y-%m-%d"))
+    if date_created_lte:
+        menu = menu.filter(cast(MenuCardModel.date_created, Date) <= date.strftime(date_created_lte, "%Y-%m-%d"))
+    if date_updated_gte:
+        menu = menu.filter(cast(MenuCardModel.date_updated, Date) >= date.strftime(date_updated_gte, "%Y-%m-%d"))
+    if date_updated_lte:
+        menu = menu.filter(cast(MenuCardModel.date_updated, Date) <= date.strftime(date_updated_lte, "%Y-%m-%d"))
     if order_by:
         if "name" in order_by.keys():
             if order_by["name"] == "desc":
