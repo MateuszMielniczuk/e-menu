@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Path
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user, get_db
@@ -22,13 +22,13 @@ def not_found_exception(id: int):
     )
 
 
-@router.get("", response_model=list[Dish])
+@router.get("", response_model=list[Dish], summary="Show all dishes stored in database")
 def show_all_dishes(db: Session = Depends(get_db)):
     dish = get_dish(db)
     return dish
 
 
-@router.post("", response_model=Dish, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=Dish, status_code=status.HTTP_201_CREATED, summary="Create new dish")
 def create_new_dish(
     request: DishCreate,
     db: Session = Depends(get_db),
@@ -39,9 +39,10 @@ def create_new_dish(
     return dish
 
 
-@router.put("/{id}", response_model=Dish)
+@router.put("/{id}", response_model=Dish, summary="Update existing dish")
 def update_dish_item(
-    id: int,
+    *,
+    id: int = Path(description="The ID of the dish item to update"),
     request: DishUpdate,
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
@@ -54,9 +55,10 @@ def update_dish_item(
     return db_dish.first()
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete existing dish object")
 def delete_dish_item(
-    id: int,
+    *,
+    id: int = Path(description="The ID of the dish item to delete"),
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):

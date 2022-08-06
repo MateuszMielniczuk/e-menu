@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Path
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user, get_db
@@ -63,15 +63,38 @@ def validate_order_parameters(parameters: list):
 @router.get("", response_model=list[MenuCard], summary="Show by default non empty menu cards")
 def show_menu_cards(
     db: Session = Depends(get_db),
-    order_by: list[str] = Query(
-        default=None, description="Available options are: name, nr_of_dishes. Operators: [asc], [desc]."
+    is_empty: bool = Query(
+        default=True,
+        description="If value is True not showing empty menu cards",
     ),
-    is_empty: bool = Query(description="If value is True not showing empty menu cards", default=True),
-    name: Optional[str] = None,
-    date_created_gte: Optional[date] = Query(default=None, alias="date_created[gte]"),
-    date_created_lte: Optional[date] = Query(default=None, alias="date_created[lte]"),
-    date_updated_gte: Optional[date] = Query(default=None, alias="date_updated[gte]"),
-    date_updated_lte: Optional[date] = Query(default=None, alias="date_updated[lte]"),
+    order_by: list[str] = Query(
+        default=None,
+        description="Order items. Available options are: name, nr_of_dishes. Operators: [asc], [desc].",
+    ),
+    name: Optional[str] = Query(
+        default=None,
+        description="Filter menu items by name.",
+    ),
+    date_created_gte: Optional[date] = Query(
+        default=None,
+        alias="date_created[gte]",
+        description="Filter menu by date greater than or equal input value. Valid type is YYYY-MM-DD",
+    ),
+    date_created_lte: Optional[date] = Query(
+        default=None,
+        alias="date_created[lte]",
+        description="Filter menu by date less than or equal input value. Valid type is YYYY-MM-DD",
+    ),
+    date_updated_gte: Optional[date] = Query(
+        default=None,
+        alias="date_updated[gte]",
+        description="Filter menu by date greater than or equal input value. Valid type is YYYY-MM-DD",
+    ),
+    date_updated_lte: Optional[date] = Query(
+        default=None,
+        alias="date_updated[lte]",
+        description="Filter menu by date less than or equal input value. Valid type is YYYY-MM-DD",
+    ),
 ):
     """Show non empty menu cards"""
     if order_by:
@@ -89,15 +112,18 @@ def show_menu_cards(
     return menu_cards
 
 
-@router.get("/{id}", response_model=MenuCard)
-def get_menu_detail(id: int, db: Session = Depends(get_db)):
+@router.get("/{id}", response_model=MenuCard, summary="Show menu card detail by")
+def get_menu_detail(
+        id: int = Path(title="The ID of the menu item to get"),
+        db: Session = Depends(get_db),
+):
     menu = get_menu_by_id(db=db, id=id).first()
     if not menu:
         raise not_found_menu_exception(id)
     return menu
 
 
-@router.post("", response_model=MenuCard, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=MenuCard, status_code=status.HTTP_201_CREATED, summary="Create new menu card")
 def create_menu_card(
     request: MenuCreate,
     db: Session = Depends(get_db),
@@ -114,9 +140,10 @@ def create_menu_card(
     return menu
 
 
-@router.put("/{id}", response_model=MenuCard)
+@router.put("/{id}", response_model=MenuCard, summary="Update existing menu card")
 def update_menu_card(
-    id: int,
+    *,
+    id: int = Path(title="The ID of the menu item to update"),
     request: MenuUpdate,
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
@@ -132,9 +159,9 @@ def update_menu_card(
     return db_menu.first()
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete existing menu card")
 def delete_menu_card(
-    id: int,
+    id: int = Path(description="The ID of the menu item to delete"),
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
@@ -145,10 +172,10 @@ def delete_menu_card(
     delete_menu(db=db, db_menu=db_menu)
 
 
-@router.post("/{id_menu}/dish={id_dish}", status_code=status.HTTP_201_CREATED)
+@router.post("/{id_menu}/dish={id_dish}", status_code=status.HTTP_201_CREATED, summary="Add dish to menu card")
 def add_dish_to_menu(
-    id_menu: int,
-    id_dish: int,
+    id_menu: int = Path(description="The ID of the menu item"),
+    id_dish: int = Path(description="The ID of the dish item to add"),
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
@@ -168,10 +195,12 @@ def add_dish_to_menu(
     return "Dish successfully added to menu"
 
 
-@router.delete("/{id_menu}/dish={id_dish}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{id_menu}/dish={id_dish}", status_code=status.HTTP_204_NO_CONTENT, summary="Remove dish from menu card"
+)
 def delete_dish_from_menu(
-    id_menu: int,
-    id_dish: int,
+    id_menu: int = Path(description="The ID of the menu item"),
+    id_dish: int = Path(description="The ID of the dish item to delete"),
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):

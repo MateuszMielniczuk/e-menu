@@ -3,8 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.default import router as default_router
 from app.api.v1.routers import router
+from app import settings
 
-app = FastAPI()
+app = FastAPI(title=settings.APP_TITLE, description=settings.APP_DESCRIPTION)
 
 origins = ["*"]
 
