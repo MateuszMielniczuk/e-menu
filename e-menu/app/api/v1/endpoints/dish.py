@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user, get_db
+from app.core.exceptions import dish_not_found_exception
 from app.crud.dish import (
     create_dish,
     delete_dish,
@@ -13,13 +14,6 @@ from app.models.user import User as UserModel
 from app.schemas.dish import Dish, DishCreate, DishUpdate
 
 router = APIRouter()
-
-
-def not_found_exception(id: int):
-    return HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Dish with ID: {id} not found in database",
-    )
 
 
 @router.get("", response_model=list[Dish], summary="Show all dishes stored in database")
@@ -50,7 +44,7 @@ def update_dish_item(
     """Update existing dish"""
     db_dish = get_dish_by_id(db=db, id=id)
     if not db_dish.first():
-        raise not_found_exception(id)
+        raise dish_not_found_exception(id)
     update_dish(db=db, db_dish=db_dish, request=request)
     return db_dish.first()
 
@@ -65,5 +59,5 @@ def delete_dish_item(
     """Delete existing dish database"""
     db_dish = get_dish_by_id(db=db, id=id).first()
     if not db_dish:
-        raise not_found_exception(id)
+        raise dish_not_found_exception(id)
     delete_dish(db=db, db_dish=db_dish)

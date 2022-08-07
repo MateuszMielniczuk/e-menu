@@ -27,7 +27,7 @@ This development setup is tested in Linux environment. Overall components are de
 ## 3. Development instruction with Docker
 
 1. Clone github repository and go inside repository folder.
-2. Create your .env file from .env.example.
+2. Create your .env file from .env.example or add names from this file to environment variables.
 3. Ensure 8000 and 5432 are not in use. If not possible, ports definitions can be changed in docker-compose.yml.
 4. Build and start project with docker compose. Run with make: `make buildup` or with docker command : `docker-compose up --build` for V1 or `docker compose up --build` for V2.
 5. To load initial data into database run command `make db-load` or enter postgres container and run `psql -d $(DATABASE_NAME) -U $(DATABASE_USERNAME) < /docker-entrypoint-initdb.d/dump.sql`.
