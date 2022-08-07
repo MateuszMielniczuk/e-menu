@@ -34,7 +34,7 @@ This development setup is tested in Linux environment. Overall components are de
 6. Development server is running under localhost:8000
 
 ## 4. Use
-SwaggerUI API documentation is available under http://127.0.0.1:8000/docs.
-Alternative ReDoc documentation is under http://127.0.0.1:8000/redoc.
-Openapi JSON is under http://127.0.0.1:8000/openapi.json. 
+SwaggerUI API documentation is available under http://127.0.0.1:8000/docs
+Alternative ReDoc documentation is under http://127.0.0.1:8000/redoc
+Openapi JSON is under http://127.0.0.1:8000/v1/openapi.json 
 All GET requests are publicly available. PUT, POST and DELETE queries can be used after login, except for `create-user` POST request.

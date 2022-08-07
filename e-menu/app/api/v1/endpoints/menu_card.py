@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user, get_db
@@ -114,8 +114,8 @@ def show_menu_cards(
 
 @router.get("/{id}", response_model=MenuCard, summary="Show menu card detail by")
 def get_menu_detail(
-        id: int = Path(title="The ID of the menu item to get"),
-        db: Session = Depends(get_db),
+    id: int = Path(title="The ID of the menu item to get"),
+    db: Session = Depends(get_db),
 ):
     menu = get_menu_by_id(db=db, id=id).first()
     if not menu:

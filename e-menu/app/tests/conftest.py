@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from app.api.default import router as default_router
 from app.api.dependencies import get_db
 from app.api.v1.routers import router as api_router
+from app.core.config import settings
 from app.crud.user import UserCreate, create, get_user
 from app.database.base import Base
 
@@ -24,7 +25,7 @@ EMAIL = "test@user.com"
 def app() -> Generator:
     Base.metadata.create_all(bind=engine)
     app = FastAPI()
-    app.include_router(api_router, prefix="/v1")
+    app.include_router(api_router, prefix=settings.API_V1_PREFIX)
     app.include_router(default_router)
     yield app
     Base.metadata.drop_all(bind=engine)
