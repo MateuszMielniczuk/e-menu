@@ -49,5 +49,11 @@ class Settings(BaseSettings):
     ALGORITHM: str = os.environ.get("ALGORITM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
+    # Email settings
+    SMTP_SERVER: str = os.environ.get("SMTP_SERVER", "localhost")
+    SMTP_PASSWORD: str = os.environ.get("SMTP_PASSWORD")
+    SMTP_PORT: int = int(os.environ.get("SMTP_PORT", 1025))
+    SENDER_EMAIL: str = os.environ.get("SENDER_EMAIL", "no@reply.email")
+
 
 settings = Settings()
