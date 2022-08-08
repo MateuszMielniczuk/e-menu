@@ -8,6 +8,7 @@
 </center>
 
 ## 1. Frameworks and libraries used
+
 [Fastapi](https://www.djangoproject.com/)
 [Uvicorn](https://www.uvicorn.org/)
 [Sqlalchemy](https://www.sqlalchemy.org/)
@@ -23,6 +24,7 @@ This development setup is tested in Linux environment. Overall components are de
 * **Docker-compose:** to package and manage multiple images together
 * (Optional) **Make:** to execute the makefile to help setup the development environment with minimum effort (recommended).
 * (Optional) **Python version minimum 3.8:** if developing in local environment
+* cron - to set up scheduled email send task
 
 ## 3. Development instruction with Docker
 
@@ -34,7 +36,26 @@ This development setup is tested in Linux environment. Overall components are de
 6. Development server is running under localhost:8000
 
 ## 4. Use
+
 SwaggerUI API documentation is available under http://127.0.0.1:8000/docs
 Alternative ReDoc documentation is under http://127.0.0.1:8000/redoc
 Openapi JSON is under http://127.0.0.1:8000/v1/openapi.json 
 All GET requests are publicly available. PUT, POST and DELETE queries can be used after login, except for `create-user` POST request.
+
+## 5. Makefile helpers
+
+To develop faster with docker containers in main directory there is file Makefile. Inside are shortcuts to run commands faster inside docker container without need to manually execute them locally.
+For example:
+* `make test` - run pytest inside container and generate code coverage report.
+* `make lint-all` - run all linting libraries to check code quality
+
+## 6. Cronjob
+
+On main repository root are two files `crontab` and `cron.sh`.
+
+* `cron.sh` is executing back-end docker container and running python script to send email.
+* `crontab` is an example script showing configuration to run cron job on the server
+
+### Example cronjob start on server(linux)
+
+Ensure that cron is installed on your system. Adjust `crontab` path to project and log file. Ensure that cron process is running if not run command `cron -f`. Add lines from `crontab` file to server configuration by running `crontab -e`. Save file and check if configuration is there `crontab -l`.

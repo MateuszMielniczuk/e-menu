@@ -65,6 +65,7 @@ db-dump:
 db-load:
 	$(DC) exec postgres /bin/sh -c\
 	  "psql -d $(DATABASE_NAME) -U $(DATABASE_USERNAME) < $(DUMP)"
-______?????_____
+
+#______?????_____TEST_____
 cronjob:
 	$(PY) python /opt/python/app/email_cron.py
