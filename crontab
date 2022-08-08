@@ -1,0 +1,3 @@
+* * * * * /bin/bash /home/{server_home_DIR}/Projects/e-menu/cron.sh >> /home/{server_home_DIR}/test.log
+* * * * * echo "Cron works" >> /home/{server_home_DIR}/test.log
+
