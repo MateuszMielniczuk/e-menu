@@ -4,7 +4,8 @@ RUN adduser --disabled-password --gecos '' python;\
     mkdir /opt/python;\
     chown python:python /opt/python
 
-RUN apt-get update \
+RUN apt-get update && apt-get -y --no-install-recommends install\
+	  tzdata \
       && python3 -m pip install --upgrade pip \
       && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
       && rm -rf /var/lib/apt/lists/*

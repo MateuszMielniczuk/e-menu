@@ -17,6 +17,7 @@ services:
       - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - TZ=${Timezone}
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "${DATABASE_NAME}", "-U", "${DATABASE_USERNAME}"]
       timeout: 5s
@@ -37,6 +38,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    environment:
+      - TZ=${Timezone}
     networks:
       - emenu-network
     ports:
