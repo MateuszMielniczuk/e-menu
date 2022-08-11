@@ -1,12 +1,12 @@
 import secrets
 
-from fastapi import APIRouter, Depends, File, HTTPException, Path, UploadFile, status
-from PIL import Image
+from fastapi import APIRouter, Depends, File, Path, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user, get_db
 from app.core.config import settings
 from app.core.exceptions import dish_not_found_exception
+from app.core.utils import save_image, validate_image_filename
 from app.crud.dish import (
     create_dish,
     delete_dish,
@@ -89,32 +89,3 @@ async def add_dish_image(
     await save_image(path=static_img_paht, image=image)
     update_dish_image(db=db, db_dish=db_dish, path="/dish_images/" + generated_img_name)
     return {"filename": settings.BASE_URL + "/" + static_img_paht}
-
-
-def validate_image_filename(filename):
-    if "." not in filename:
-        raise HTTPException(
-            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
-            detail="Image file needs to have an extension",
-        )
-    image_name, *_, extension = filename.split(".")
-    if extension not in ["jpg", "jpeg", "png"]:
-        raise HTTPException(
-            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
-            detail="Not allowed file extension. Pick: jped, jpg, png",
-        )
-    return image_name, extension
-
-
-async def save_image(path: str, image: memoryview) -> None:
-    file_content = await image.read()
-
-    with open(path, "wb") as file:
-        file.write(file_content)
-
-    # Pillow
-    img = Image.open(path)
-    img = img.resize(size=(200, 200))
-    img.save(path)
-
-    image.close()

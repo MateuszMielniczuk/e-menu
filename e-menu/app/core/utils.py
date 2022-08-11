@@ -4,6 +4,7 @@ from typing import Any, Union
 from fastapi import HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
+from PIL import Image
 
 from app.core.config import settings
 
@@ -49,3 +50,32 @@ def validate_order_parameters(parameters: list):
                 )
             order_dict[k] = v[0][:-1]
     return order_dict
+
+
+def validate_image_filename(filename):
+    if "." not in filename:
+        raise HTTPException(
+            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
+            detail="Image file needs to have an extension",
+        )
+    image_name, *_, extension = filename.split(".")
+    if extension not in ["jpg", "jpeg", "png"]:
+        raise HTTPException(
+            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
+            detail="Not allowed file extension. Pick: jped, jpg, png",
+        )
+    return image_name, extension
+
+
+async def save_image(path: str, image: memoryview) -> None:
+    file_content = await image.read()
+
+    with open(path, "wb") as file:
+        file.write(file_content)
+
+    # Pillow
+    img = Image.open(path)
+    img = img.resize(size=(200, 200))
+    img.save(path)
+
+    image.close()
