@@ -1,14 +1,14 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel  # , EmailStr
+from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
-    email: Optional[str]
+    email: Optional[EmailStr]
 
 
 class UserCreate(UserBase):
-    email: str
+    email: EmailStr
     not_hashed_password: str
 
 
@@ -33,4 +33,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    email: Union[str, None] = None
+    email: Union[EmailStr, None] = None
