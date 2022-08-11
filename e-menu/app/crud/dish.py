@@ -37,3 +37,9 @@ def delete_dish(db: Session, db_dish: DishModel):
     db.delete(db_dish)
     db.commit()
     return "Resource successfully deleted"
+
+
+def update_dish_image(db: Session, db_dish: DishModel, path: str):
+    db_dish.update({"image_path": path})
+    db.commit()
+    return "Image successfully updated"

@@ -43,7 +43,8 @@ CREATE TABLE public.dish (
     description text,
     price numeric(10,2),
     preparation_time integer,
-    is_vegan boolean NOT NULL
+    is_vegan boolean NOT NULL,
+    image_path character varying(2048)
 );
 
 
@@ -183,7 +184,7 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-11120bc2540a
+2e8818b11deb
 \.
 
 
@@ -191,35 +192,35 @@ COPY public.alembic_version (version_num) FROM stdin;
 -- Data for Name: dish; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.dish (id, date_created, date_updated, name, description, price, preparation_time, is_vegan) FROM stdin;
-1	2022-08-01 08:54:41.362732+00	2022-08-01 12:28:36.150497+00	Scrambled eggs	Fresh from local farm with onion.	5.00	5	f
-2	2022-08-01 10:03:38.094122+00	2022-08-01 12:36:19.094799+00	Smoothie	Mixed Berry or Strawberry-banana	5.00	3	t
-3	2022-08-01 12:37:06.863352+00	\N	Oatmeal	Served with brown sugar, raisins, and choice of steamed milk. Choice of blueberries and/or banana.	8.00	8	t
-4	2022-08-01 12:37:45.795626+00	\N	Avocado Toast	Toy box tomatoes, sunflower seeds, pickled onions.	6.00	6	t
-5	2022-08-01 12:38:36.19606+00	\N	Steak & Eggs	5oz. Angus Tenderloin served with two eggs and breakfast potatoes.	10.00	12	f
-6	2022-08-01 12:38:56.549666+00	\N	Smoked Salmon Plate	Tomato, cream cheese, capers, and choice of bagel.	12.00	12	f
-7	2022-08-01 12:43:37.199601+00	\N	Bacon Omelet	Bacon, heirloom tomatoes, mixed mushrooms and white cheddar cheese.	14.00	15	f
-8	2022-08-01 12:44:18.93881+00	\N	Buttermilk Pancake	Choice of buttermilk, blueberry, chocolate chip or banana. Maple syrup.	10.00	13	f
-9	2022-08-01 12:45:19.437427+00	\N	Burrito	Breakfast Burritos are the ultimate morning meal on the go.	10.00	10	t
-10	2022-08-01 12:46:31.719006+00	2022-08-01 12:48:03.212667+00	Fish Tacos	Grilled or fried white fish, chipotle sauce, fresh pico de gallo, cheese, corn tortillas and homemade salsa. Served with shoe string fries	20.00	20	f
-12	2022-08-01 12:49:34.888184+00	\N	Meatloaf Sandwich	Thick slice of house-made meatloaf topped with BBQ sauce, cheddar cheese, garlic aioli, lettuce, red onions, tomatoes on grilled Parmesan sourdough	15.00	23	f
-13	2022-08-01 12:50:05.532483+00	\N	Shrimp Fresca Pasta.	Grilled shrimp, diced tomatoes and spinach served over pasta in a light lemon butter sauce	35.00	25	f
-14	2022-08-01 12:51:31.694666+00	\N	Fried Ice Cream	Hot and cold.	13.00	5	t
-15	2022-08-01 12:52:01.649829+00	\N	Chocolate Mousse	Sweet and sour	11.00	5	t
-16	2022-08-01 12:52:54.454717+00	\N	Quesadilla	Two crispy flour tortillas stuffed with cheddar and jack cheese, green onions and tomatoes. Served with sour cream and guacamole. 	33.00	15	f
-17	2022-08-01 12:53:36.336234+00	\N	Mexican Pizza	Crisp flour tortilla topped with choice of refried or Rancho beans (whole), and choice of ground beef, chicken or picadillo. Topped with jack and cheddar cheese, tomatoes and green onions. Garnished with sour cream and guacamole.	14.00	20	f
-18	2022-08-01 12:54:16.427131+00	\N	Appetizer Guacamole	Azteca's fresh guacamole with chips.	12.00	15	t
-11	2022-08-01 12:49:00.088339+00	\N	Chicken Tenders	Hand-breaded tenders served with smoky mesquite sweet BBQ sauce and shoe string fries	25.00	22	f
-19	2022-08-01 12:57:07.216615+00	\N	Tea with rum	Tea with rum	6.00	2	t
-20	2022-08-01 12:57:54.547003+00	\N	Cafe latte	With oat milk	6.00	2	t
-21	2022-08-01 12:58:24.934534+00	\N	Cappuccino	With oat or cow milk	6.00	2	t
-22	2022-08-01 12:58:44.021625+00	\N	Orange juice	Fresh not from concentrate	6.00	2	t
-23	2022-08-01 12:59:04.222213+00	\N	Red wine	Spanish red	6.00	2	t
-24	2022-08-01 12:59:17.505347+00	\N	Beer	Draft beer	6.00	2	t
-25	2022-08-01 13:00:22.459795+00	\N	Croissant	With or without chocolate	6.00	2	t
-26	2022-08-01 13:01:28.014843+00	\N	Mushroom dumplings	10 pieces.	12.00	10	t
-27	2022-08-01 13:01:50.806209+00	\N	Cheese dumplings	10 pieces.	14.00	10	f
-28	2022-08-01 13:02:27.927092+00	\N	Cod soup	With potatoes and garlic bread.	14.00	8	f
+COPY public.dish (id, date_created, date_updated, name, description, price, preparation_time, is_vegan, image_path) FROM stdin;
+10	2022-08-01 12:46:31.719006+00	2022-08-01 12:48:03.212667+00	Fish Tacos	Grilled or fried white fish, chipotle sauce, fresh pico de gallo, cheese, corn tortillas and homemade salsa. Served with shoe string fries	20.00	20	f	/default_dish.jpg
+12	2022-08-01 12:49:34.888184+00	\N	Meatloaf Sandwich	Thick slice of house-made meatloaf topped with BBQ sauce, cheddar cheese, garlic aioli, lettuce, red onions, tomatoes on grilled Parmesan sourdough	15.00	23	f	/default_dish.jpg
+13	2022-08-01 12:50:05.532483+00	\N	Shrimp Fresca Pasta.	Grilled shrimp, diced tomatoes and spinach served over pasta in a light lemon butter sauce	35.00	25	f	/default_dish.jpg
+14	2022-08-01 12:51:31.694666+00	\N	Fried Ice Cream	Hot and cold.	13.00	5	t	/default_dish.jpg
+15	2022-08-01 12:52:01.649829+00	\N	Chocolate Mousse	Sweet and sour	11.00	5	t	/default_dish.jpg
+16	2022-08-01 12:52:54.454717+00	\N	Quesadilla	Two crispy flour tortillas stuffed with cheddar and jack cheese, green onions and tomatoes. Served with sour cream and guacamole. 	33.00	15	f	/default_dish.jpg
+24	2022-08-01 12:59:17.505347+00	2022-08-10 18:16:09.98267+00	Bla Bla dish	Dish description ...	12.50	10	t	/dish_images/default5b8de643d32e5d59879b.jpeg
+17	2022-08-01 12:53:36.336234+00	\N	Mexican Pizza	Crisp flour tortilla topped with choice of refried or Rancho beans (whole), and choice of ground beef, chicken or picadillo. Topped with jack and cheddar cheese, tomatoes and green onions. Garnished with sour cream and guacamole.	14.00	20	f	/default_dish.jpg
+18	2022-08-01 12:54:16.427131+00	\N	Appetizer Guacamole	Azteca's fresh guacamole with chips.	12.00	15	t	/default_dish.jpg
+2	2022-08-01 10:03:38.094122+00	2022-08-01 12:36:19.094799+00	Smoothie	Mixed Berry or Strawberry-banana	5.00	3	t	/default_dish.jpg
+3	2022-08-01 12:37:06.863352+00	\N	Oatmeal	Served with brown sugar, raisins, and choice of steamed milk. Choice of blueberries and/or banana.	8.00	8	t	/default_dish.jpg
+4	2022-08-01 12:37:45.795626+00	\N	Avocado Toast	Toy box tomatoes, sunflower seeds, pickled onions.	6.00	6	t	/default_dish.jpg
+5	2022-08-01 12:38:36.19606+00	\N	Steak & Eggs	5oz. Angus Tenderloin served with two eggs and breakfast potatoes.	10.00	12	f	/default_dish.jpg
+6	2022-08-01 12:38:56.549666+00	\N	Smoked Salmon Plate	Tomato, cream cheese, capers, and choice of bagel.	12.00	12	f	/default_dish.jpg
+7	2022-08-01 12:43:37.199601+00	\N	Bacon Omelet	Bacon, heirloom tomatoes, mixed mushrooms and white cheddar cheese.	14.00	15	f	/default_dish.jpg
+8	2022-08-01 12:44:18.93881+00	\N	Buttermilk Pancake	Choice of buttermilk, blueberry, chocolate chip or banana. Maple syrup.	10.00	13	f	/default_dish.jpg
+9	2022-08-01 12:45:19.437427+00	\N	Burrito	Breakfast Burritos are the ultimate morning meal on the go.	10.00	10	t	/default_dish.jpg
+11	2022-08-01 12:49:00.088339+00	\N	Chicken Tenders	Hand-breaded tenders served with smoky mesquite sweet BBQ sauce and shoe string fries	25.00	22	f	/default_dish.jpg
+19	2022-08-01 12:57:07.216615+00	\N	Tea with rum	Tea with rum	6.00	2	t	/default_dish.jpg
+20	2022-08-01 12:57:54.547003+00	\N	Cafe latte	With oat milk	6.00	2	t	/default_dish.jpg
+21	2022-08-01 12:58:24.934534+00	\N	Cappuccino	With oat or cow milk	6.00	2	t	/default_dish.jpg
+22	2022-08-01 12:58:44.021625+00	\N	Orange juice	Fresh not from concentrate	6.00	2	t	/default_dish.jpg
+23	2022-08-01 12:59:04.222213+00	\N	Red wine	Spanish red	6.00	2	t	/default_dish.jpg
+25	2022-08-01 13:00:22.459795+00	\N	Croissant	With or without chocolate	6.00	2	t	/default_dish.jpg
+26	2022-08-01 13:01:28.014843+00	\N	Mushroom dumplings	10 pieces.	12.00	10	t	/default_dish.jpg
+27	2022-08-01 13:01:50.806209+00	\N	Cheese dumplings	10 pieces.	14.00	10	f	/default_dish.jpg
+28	2022-08-01 13:02:27.927092+00	\N	Cod soup	With potatoes and garlic bread.	14.00	8	f	/default_dish.jpg
+1	2022-08-01 08:54:41.362732+00	2022-08-01 12:28:36.150497+00	Scrambled eggs	Fresh from local farm with onion.	5.00	5	f	/default_dish.jpg
 \.
 
 
@@ -293,6 +294,8 @@ COPY public.menu_dish_junction (menu_card_id, dish_id) FROM stdin;
 --
 
 COPY public."user" (id, date_created, date_updated, email, password) FROM stdin;
+1	2022-08-08 14:55:12.941834+00	\N	matheuszmmi@gmail.com	$2b$12$iQXEr.3h0uPSjmCteaZiDOiuxTqiEhGKoiySj3GaVfrSsj6/8HiKK
+2	2022-08-08 15:40:27.605192+00	\N	mateuszmmi@poczta.fm	$2b$12$J1a2Sgy1iqc7U4Kv8qICc.g5zMJHS/pif4qKE.tcl9YyqMjVFmDvS
 \.
 
 
@@ -300,7 +303,7 @@ COPY public."user" (id, date_created, date_updated, email, password) FROM stdin;
 -- Name: dish_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.dish_id_seq', 28, true);
+SELECT pg_catalog.setval('public.dish_id_seq', 40, true);
 
 
 --
@@ -314,7 +317,7 @@ SELECT pg_catalog.setval('public.menu_card_id_seq', 5, true);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.user_id_seq', 2, true);
 
 
 --

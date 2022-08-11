@@ -27,6 +27,7 @@ class Dish(DishBase):
     id: int = Field(description="Dish database ID")
     date_created: datetime = Field(description="Menu card creation date")
     date_updated: Optional[datetime] = Field(description="Menu card last update date")
+    image_url: Optional[str] = Field(description="Path to the image")
 
     class Config:
         orm_mode = True

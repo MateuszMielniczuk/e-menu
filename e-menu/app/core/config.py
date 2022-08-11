@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = f"postgresql://{USERNAME}:{PASSWORD}@{CLIENT}:{PORT}/{DB_NAME}"
 
+    BASE_URL: str = os.environ.get("BASE_URL", "localhost:8000")
+    STATIC_DIR: str = "static"
+
     # APP description
     APP_TITLE: str = "e-MENU app for managing menus and dishes"
     APP_DESCRIPTION: str = """

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, DateTime, Integer
 from datetime import datetime
 
+from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 
 
